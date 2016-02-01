@@ -1,3 +1,1 @@
 # AlphaEigenvalue
-# AlphaEigenvalue
-# AlphaEigenvalue
