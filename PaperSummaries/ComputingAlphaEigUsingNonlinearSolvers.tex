@@ -1,0 +1,126 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{notes}
+
+% In your .tex file
+% !TEX program = pdflatex
+
+\newcommand{\thiscoursecode}{[XXXX] (\#\#\#)}
+\newcommand{\thiscoursename}{Alpha-Eigenvalue Research at UC Berkeley}
+\newcommand{\thisprof}{Dr. Great Professor}
+\newcommand{\me}{Liam Horne}
+\newcommand{\thisterm}{Paper Summary}
+\newcommand{\website}{MYWEBSITE.COM}
+
+% Headers
+\chead{\thiscoursename}
+\lhead{\thisterm}
+
+
+%%%%%% TITLE %%%%%%
+\newcommand{\notefront} {
+\pagenumbering{roman}
+\begin{center}
+
+{\ttfamily \url{\website}} {\small}
+
+\textbf{\Huge{\noun{\thiscoursecode}}}{\Huge \par}
+
+{\large{\noun{\thiscoursename}}}\\ \vspace{0.1in}
+
+  {\noun \thisprof} \ $\bullet$ \ {\noun \thisterm} \ $\bullet$ \ {\noun {University of Waterloo}} \\
+
+  \end{center}
+  }
+  
+  \title{Computing the Alpha-Eigenvalue Using Nonlinear Solvers}
+  
+\date{\vspace{-5ex}}
+%\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Information}
+
+Authors: Erin D. Fichtl and James S. Warsa \\
+
+Organization: Los Alamos National Laboratory, Computational Physics Group
+
+\section*{Introduction}
+
+$\alpha$-eigenvalue formulation of the multigroup (MG) neutron transport equation (NTE) formed by assuming exponential time-behavior of flux
+
+\begin{equation*}
+\psi_{g,n}(\mathbf{r},t) = e^{\alpha t} \psi^{\alpha}_{g,n}(\mathbf{r})
+\end{equation*}
+
+Plugging in the flux to the MG NTE:
+
+\begin{equation*}  
+\bigg ( \frac{\alpha}{v_g} + \hat{\Omega}_n \cdot \nabla + \sigma_{t,g}(\mathbf{r}) \bigg ) \psi^{\alpha}_{g,n} = \sum_{g'} \sigma_{s,g'\rightarrow g}(\mathbf{r})\phi^{\alpha}_{g'} + \sum_{g'} \bar{\nu} \sigma_{f,g' \rightarrow g}(\mathbf{r})\phi^{\alpha}_{g'}
+\end{equation*}
+
+Dominant mode corresponds to algebraically largest eigenvalue.
+
+\section*{Methods}
+
+\subsection*{k-eigenvalue method}
+
+Traditionally computed using multiple k-eigenvalue solutions.
+
+Limitation: If $\alpha$ is negative enough, effective total cross section becomes negative in some groups: 
+
+\begin{equation*}
+\tilde{\sigma}_{t,g} = \bigg ( \frac{\alpha}{v_g} + \sigma_{t,g} \bigg ) < 0.
+\end{equation*}
+
+Negative XS cause instabilities in transport sweeps.
+
+\subsection*{Reformulation as Standard Eigenvalue Problem}
+
+Rewrite discretized form of $\alpha$-NTE:
+
+\begin{equation*}
+(\alpha \mathbf{L}_{\alpha} + \mathbf{L})\psi^{\alpha} = \mathbf{M}(\mathbf{S}+\mathbf{F})\mathbf{D}\psi^{\alpha}
+\end{equation*}
+
+as
+
+\begin{equation*}
+\alpha \psi^{\alpha} = \mathbf{L}_{\alpha}^{-1} [\mathbf{M}(\mathbf{S}+\mathbf{F})\mathbf{D} - \mathbf{L}]\psi^{\alpha}
+\end{equation*}
+
+and use standard eigensolvers for subcritical systems ($\alpha < 0$) for which dominant $\alpha$ is smallest in magnitude. For supercritical systems, need correction $\frac{\beta}{v}\psi^{\alpha}$ that is subtracted from both sides:
+
+\begin{equation*}
+\alpha \psi^{\alpha} - \frac{\beta}{v}\psi^{\alpha} = \mathbf{L}_{\alpha}^{-1} [\mathbf{M}(\mathbf{S}+\mathbf{F})\mathbf{D} - \mathbf{L}]\psi^{\alpha} - \frac{\beta}{v}\psi^{\alpha}
+\end{equation*}
+
+Effective eigenvalues, $(\alpha - \beta)$, are all negative though method requires prior knowledge of eigenvalue to determine correction term. Also problematic since codes usually apply $\mathbf{L}^{-1}$ instead of $\mathbf{L}$ directly.
+
+\subsection*{Recast into Nonlinear Iteration Problem}
+
+Eigenvalue problems can be thought of nonlinear problems since they involve product of two unknowns, the eigenvalue and eigenvector.
+
+For $\alpha$-NTE, unknown is vector $\mathbf{x} = \begin{bmatrix} \mathbf{y} \\ \alpha \end{bmatrix}$ 
+
+Fixed-point iteration:
+
+\begin{equation*}
+\mathbf{y}^{\ell + 1} = \mathbf{P}(\alpha^{(\ell)})\mathbf{y}^{\ell}
+\end{equation*}
+\begin{equation*}
+\alpha^{\ell + 1} = \alpha^{(\ell)} + a(\mathbf{x}^{\ell})
+\end{equation*}
+
+Can be rewritten as $\mathbf{x}^{(\ell + 1)} = \mathbf{x}^{(\ell)} - \mathcal{F}(\mathbf{x}^{(\ell)})$ where $\mathcal{F}$ is a nonlinear residual given by 
+
+\begin{equation*}
+\mathcal{F}(\mathbf{x}) = \begin{bmatrix} \mathbf{y} - \mathbf{P}(\alpha)\mathbf{y} \\ -a(\mathbf{x}) \end{bmatrix}
+\end{equation*}
+
+$\mathbf{y}$ represents either $\phi^{\alpha}$ or $\psi^{\alpha}$ depending on the formulation and $a$ is the eigenvalue update.
+
+\end{document}
