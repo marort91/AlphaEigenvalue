@@ -1,6 +1,6 @@
 clc, clear, clf, close all
 
-nusigf = [ 0.080 0.080;
+nusigf = [ 0.070 0.070;
            0.000 0.000];
        
 sigs = [ 0.000 0.000;
@@ -9,34 +9,13 @@ sigs = [ 0.000 0.000;
 sigR = [ 0.09 0.09 ];
 D = [0.9 0.9];
 
-%nusigf = [ 0.070 0.010 ];
-%sigtot = [0.066 0.066];
-%sigtot = [ 0.1 0.1 ];
-%sigss = [0.010 0.010];
-%sigR = sigtot - diag(sigs)';
-%sigR = [ 0.066 1 ];
-%D = [ 0.9 0.9 ];
-%sigs = [ 0.0 0.05 ];
-
-% nusigf = [ 0.008476 0.18514 ];
-% sigR = [ 0.02619 0.1210 ];
-% D = [ 1.2627 0.3543 ];
-% siga = [ 0.01207 0.1210];
-% 
-% sigs = [ sigR(2)-siga(2) sigR(1) - siga(1) ];
-
-%B = @(x) 1 - nusigf(1)/(sigR(1)+D(1)*x) + sigs(2)/(sigR(1)+D(1)*x)*(nusigf(2)/(sigR(2)+D(2)*x));
+%B = @(x) 1 - nusigf(1)/(sigR(1)+D(1)*x) + sigs(2,1)/(sigR(1)+D(1)*x)*(nusigf(2)/(sigR(2)+D(2)*x));
 %B2 = fsolve(B,50);
 
-%Lx = pi/(sqrt(B2))
+Lx = 30;
 
-%This makes slab critical
-%Lx = 33.401;
-%Lx = 6.79405;
 nEgrps = 2;
 
-Lx = 30.0;
-%Lx = pi*((nusigf(1)-sigR(1))/D(1))^(-0.5);
 N = 100;
 
 h = Lx/(N-1);
@@ -86,26 +65,18 @@ for i = 1:1000
     k_i = keff;
     f(:,:,:) = 0;
     q(:,:,:) = 0;
-    %q(:,:,:) = 0;
     
     for j = 1:nEgrps
         
-        % Need to separate fission source and scattering source for my
-        % sake.
-        
         for k = 1:nEgrps
             
-            f(:,1,j) = f(:,1,j) + nusigf(j,k)*phi(:,1,k);
+            f(:,1,j) = f(:,1,j) + (1/keff).*nusigf(j,k)*phi(:,1,k);
             
         end
         
         for k = 1:nEgrps
-            
-            %if k ~= j
                 
-                q(:,1,j) = q(:,1,j) + sigs(j,k)*phi(:,1,k);
-                
-            %end
+            q(:,1,j) = q(:,1,j) + sigs(j,k)*phi(:,1,k);
             
         end
             
@@ -123,16 +94,13 @@ for i = 1:1000
             Snew = Snew + sum(nusigf(l,m)*psi(:,1,m));
             Sprev = Sprev + sum(nusigf(l,m)*phi(:,1,m));
         
-        %Snew = Snew + sum(nusigf(l).*psi(:,1,l));
-        %Sprev = Sprev + sum(nusigf(l).*phi(:,1,l));
-        
         end
         
     end
     
-    keff = Snew/Sprev;
+    keff = Snew/((1/keff)*Sprev);
     
-    phi = (1/keff).*psi;
+    phi = psi;
     phi(1,1,:) = 0;
     phi(N,1,:) = 0;
     
@@ -153,7 +121,7 @@ strs = {'ko-','rx-'};
 
 for i = 1:nEgrps
     
-    plot(x,phi(:,1,i),strs{i})%,x,phi(:,1,2),'rx-');
+    plot(x,phi(:,1,i),strs{i});
     
 end
 legend('Fast Flux','Thermal Flux');
