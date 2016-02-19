@@ -1,22 +1,27 @@
 clc, clear, clf, close all
 
-nusigf = [ 0.070 0.070;
-           0.000 0.000];
+nusigf = [ 0.070 0.070 0.010;
+           0.000 0.000 0.000;
+           0.000 0.000 0.000];
        
-sigs = [ 0.000 0.000;
-         0.050 0.000];
+sigs = [ 0.000 0.000 0.000;
+         0.050 0.000 0.000;
+         0.020 0.020 0.000];
      
-sigR = [ 0.09 0.09 ];
-D = [0.9 0.9];
+sigR = [ 0.09 0.09 0.09 ];
+D = [0.9 0.9 0.9];
+
+alpha = 0;
 
 %B = @(x) 1 - nusigf(1)/(sigR(1)+D(1)*x) + sigs(2,1)/(sigR(1)+D(1)*x)*(nusigf(2)/(sigR(2)+D(2)*x));
 %B2 = fsolve(B,50);
 
-Lx = 30;
+%Lx = 30;
+Lx = 25.4272;
 
 nEgrps = 2;
 
-N = 100;
+N = 1000;
 
 h = Lx/(N-1);
 
@@ -32,7 +37,7 @@ end
 
 for i = 1:nEgrps
     
-    T(:,:,i) = sigR(i).*eye(N,N);
+    T(:,:,i) = (sigR(i) - alpha).*eye(N,N);
     
 end
 
@@ -117,7 +122,7 @@ end
 
 hold on
 
-strs = {'ko-','rx-'};
+strs = {'ko-','rx-','b*'};
 
 for i = 1:nEgrps
     

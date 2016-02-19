@@ -3,7 +3,7 @@
 % Finds width of critical slab using one-speed diffusion theory
 % with zero flux boundary conditions on the edges. 
 
-%clc, clear
+clc, clear
 
 %% Neutron Diffusion Equation in Slab with Fission Source
 % The NDE in a slab is given by
@@ -19,12 +19,12 @@
 %D = 2;
 %nusigf = 3*pi;
 %siga = pi;
-D = 0.9; nusigf = 0.070; siga = 0.09;%0.066;
+D = 0.9; nusigf = 0.070; siga = 0.066;
 
 %% Slab Geometry Width and Discretization
-%Lx = pi*((nusigf-siga)/D)^(-0.5);
+Lx = pi*((nusigf-siga)/D)^(-0.5);
 %Lx = 47.1239;
-Lx = 30;
+%Lx = 30;
 
 %Discretization of geometry
 N = 100;
@@ -84,6 +84,7 @@ for i = 1:100
     kold = k;
     
     psi = (M-beta.*eye(N,N))\(nusigf.*phi0);
+    psi(1) = 0; psi(end) = 0;
     k = sum(nusigf.*psi)/sum(nusigf*phi0);
     phi0 = (1/k).*psi;
     phi0(1) = 0;
