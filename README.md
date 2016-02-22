@@ -7,3 +7,5 @@ Log File:
 2/1/2016-2/5/2016: Discovered iPython notebook equation rendering problem on GitHub. Reverted to PDF summaries of papers placed in LiteratureReview folder. Wrote one-speed neutron diffusion equation that solves for k-effective. Alpha-eig algorithms to be implemented along with linear solvers. Currently using \ operator in MATLAB.
 
 2/8/2016-2/12/2016: Created iPython notebooks for both criticality and alpha-eigenvalue methods. Alpha-eigenvalue works though subject to limitations (terrible guesses and sufficiently subcritical systems break it...) Not unexpected result. To implement deflation method to calculate criticality eigenvalue spectrum. Next step is probably two speed data and figuring out how to scatter neutrons...
+
+2/22/2016: Implemented two-group NDE solver. Validated and verified using two-group analytical solution. Seems to work for more energy groups. Currently no upscatter. Hill's algorithm implemented for alpha-eigenvalue calculation. Python notebook to be finished. Need to reexamine array indexing methods. Reviewed Larsen papers on eigenvalues. Feel comfortable with theorems presented.

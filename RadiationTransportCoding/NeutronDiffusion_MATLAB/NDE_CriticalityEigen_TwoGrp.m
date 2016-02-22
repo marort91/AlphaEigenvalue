@@ -11,12 +11,7 @@ sigs = [ 0.000 0.000 0.000;
 sigR = [ 0.09 0.09 0.09 ];
 D = [0.9 0.9 0.9];
 
-alpha = 0;
-
-%B = @(x) 1 - nusigf(1)/(sigR(1)+D(1)*x) + sigs(2,1)/(sigR(1)+D(1)*x)*(nusigf(2)/(sigR(2)+D(2)*x));
-%B2 = fsolve(B,50);
-
-%Lx = 30;
+Lx = 23.67400;
 Lx = 25.4272;
 
 nEgrps = 2;
@@ -37,7 +32,7 @@ end
 
 for i = 1:nEgrps
     
-    T(:,:,i) = (sigR(i) - alpha).*eye(N,N);
+    T(:,:,i) = sigR(i).*eye(N,N);
     
 end
 
@@ -131,3 +126,4 @@ for i = 1:nEgrps
 end
 legend('Fast Flux','Thermal Flux');
 grid on
+axis([0 Lx+1 0 max(max(phi))])
