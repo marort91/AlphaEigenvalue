@@ -4,4 +4,5 @@
 *.synctex.gz
 *.sty
 *.tex
-
+*.out
+*.sw*
