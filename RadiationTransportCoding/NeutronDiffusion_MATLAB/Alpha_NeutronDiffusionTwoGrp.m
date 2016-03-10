@@ -9,31 +9,37 @@ clc, clear
 
 %Slab width, discretization, and alpha-eigenvalue guess and modifier
 N = 100;
-alpha = 0.00;
+%alpha = 0.00;
 evm = 0.1;
 Lx = 25.4272;
 tol = 1e-10;
 
+alpha = -0.5:0.05:1.0;
+alpha_guess = alpha;
+
+for iter = 1:length(alpha)
+
 for i = 1:100
     
-    k = TwoGrpNDE(Lx,N,alpha);
+    k = TwoGrpNDE(Lx,N,alpha(iter));
     
     if i == 2
         
-        alpha_prev = alpha;
-        alpha = alpha + evm;
+        alpha_prev = alpha(iter);
+        alpha(iter) = alpha(iter) + evm;
         
     elseif i > 2
         
-        if abs(alpha - alpha_prev) < tol
+        if abs(alpha(iter) - alpha_prev) < tol
             
+            fprintf('Converged in %i iterations\n',i)
             break
             
         end
         
-        alpha_new = alpha_prev + (1-kprev)/(k-kprev)*(alpha-alpha_prev);
-        alpha_prev = alpha;
-        alpha = alpha_new;
+        alpha_new = alpha_prev + (1-kprev)/(k-kprev)*(alpha(iter)-alpha_prev);
+        alpha_prev = alpha(iter);
+        alpha(iter) = alpha_new;
         
     else
         
@@ -45,4 +51,11 @@ for i = 1:100
     
 end
 
-fprintf('Alpha-eigenvalue converged: %f in %i iterations \n',alpha,i)
+alpha_calc(iter) = alpha(iter);
+
+end
+
+
+
+
+%fprintf('Alpha-eigenvalue converged: %f in %i iterations \n',alpha,i)

@@ -72,7 +72,7 @@ for i = 1:100
             q(:,1,j) = q(:,1,j) + sigs(j,k)*phi(:,1,k);
             
         end
-            
+        
         psi(:,1,j) = M(:,:,j)\(f(:,1,j)+q(:,1,j));
             
     end
