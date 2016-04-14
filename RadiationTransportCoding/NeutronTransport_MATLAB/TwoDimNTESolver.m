@@ -13,7 +13,7 @@ xL = 0; xR = 1;
 yB = 0; yT = 1;
 
 Nx = 10; Ny = 10;
-Nang = 2;
+Nang = 16;
 
 [mu,eta,wi] = level_sym_table(Nang);
 
@@ -30,6 +30,15 @@ Q = zeros(Nx,Ny);
 %% Calculation Parameters
 maxiter = 1e3; %Maximum number of sweeps allowed
 tol = 1e-8;
+
+%% Boundary Conditions
+bc = 1;
+
+%% Code Parameters to be Printed to Terminal
+fprintf('S%i calculation with scattering cross section = %f \n',Nang,sigs0);
+fprintf('Maximum number of iterations: %i \n',maxiter);
+fprintf('Scalar flux two-norm tolerance: %f \n',tol);
+fprintf('\n');
 
 %% Transport Sweep
 for iter = 1:maxiter
@@ -48,8 +57,12 @@ for iter = 1:maxiter
     
     for l = 1:Nang*(Nang+2)/2
         
-        angular_flux_half_x = zeros(Nx+1,Nx+1);
-        angular_flux_half_y = zeros(Ny+1,Ny+1);
+        if ( bc == 1 )
+        
+            angular_flux_half_x = zeros(Nx,Nx+1);
+            angular_flux_half_y = zeros(Ny+1,Ny);
+            
+        end
         
         if ( mu(l) > 0 && eta(l) > 0 )
             
