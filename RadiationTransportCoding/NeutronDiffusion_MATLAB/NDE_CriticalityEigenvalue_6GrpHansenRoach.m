@@ -3,33 +3,36 @@
 clc, clear, clf
 
 %Data ordering: fast group -> thermal group
-chi = [0.204 0.344 0.168 0.18 0.09 0.014];
-nusigf = [ 3.557 3.196 3.087 2.988 3.518 5.71];
-sigf = [1.21 1.22 1.22 1.2 1.43 2.34];
-sigc = [ 0.05 0.08 0.11 0.15 0.23 0.6];
-sigtr = [ 4.25 4.5 4.65 5.2 7.9 12];
+% chi = [0.204 0.344 0.168 0.18 0.09 0.014];
+% nusigf = [ 3.557 3.196 3.087 2.988 3.518 5.71];
+% sigf = [1.21 1.22 1.22 1.2 1.43 2.34];
+% sigc = [ 0.05 0.08 0.11 0.15 0.23 0.6];
+% sigtr = [ 4.25 4.5 4.65 5.2 7.9 12];
+% 
+% sigs = [1.2	0.27 0.37 0.65 0.44 0.06;
+%         0.0 1.77 0.24 0.67 0.45 0.07;
+%         0.0 0.00 2.30 0.55 0.40 0.07;
+%         0.0	0.00 0.00 3.42 0.35 0.08;
+%         0.0	0.00 0.00 0.00 6.16	0.08;
+%         0.0	0.00 0.00 0.00 0.00	9.06];
+%     
+% sigst = sum(sigs);
+% sigt = sigf + sigc + sigst;
+% 
+% sigR = sigt - diag(sigs)';
+% 
+% D = 1./(3.*sigtr);
 
-sigs = [1.2	0.27 0.37 0.65 0.44 0.06;
-        0.0 1.77 0.24 0.67 0.45 0.07;
-        0.0 0.00 2.30 0.55 0.40 0.07;
-        0.0	0.00 0.00 3.42 0.35 0.08;
-        0.0	0.00 0.00 0.00 6.16	0.08;
-        0.0	0.00 0.00 0.00 0.00	9.06];
-    
-sigst = sum(sigs);
-sigt = sigf + sigc + sigst;
+XSdata = CrossSectionRead(1,{'U235_fast_6grp.txt'});
+[chi,nusigf,sigf,D,sigR,sigs] = XSInterpret(XSdata);
 
-sigR = sigt - diag(sigs)';
-
-D = 1./(3.*sigtr);
-
-nEgrps = length(sigst);
+nEgrps = length(chi);
 
 alpha = 0;
 
 % Geometry
 Lx = 0.553869;
-N = 500;
+N = 100;
 h = Lx/(N-1);
 
 x = 0:h:Lx;
@@ -115,8 +118,6 @@ for i = 1:10000
         
         for m  = 1:nEgrps
             
-            %Snew = Snew + sum(F(l,m)*psi(:,1,m));
-            %Sprev = Sprev + sum(F(l,m)*phi(:,1,m));
             Snew = Snew + sum(nusigf(m)*psi(:,1,m));
             Sprev = Sprev + sum(nusigf(m)*phi(:,1,m));
         

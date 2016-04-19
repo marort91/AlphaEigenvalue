@@ -3,7 +3,7 @@
 % Finds width of critical slab using one-speed diffusion theory
 % with zero flux boundary conditions on the edges. 
 
-clc, clear
+clc, clear, clf
 
 %% Neutron Diffusion Equation in Slab with Fission Source
 % The NDE in a slab is given by
@@ -22,29 +22,29 @@ clc, clear
 D = 0.9; nusigf = 0.070; siga = 0.066;
 
 %% Slab Geometry Width and Discretization
-Lx = pi*((nusigf-siga)/D)^(-0.5);
-%Lx = 47.1239;
+%Lx = pi*((nusigf-siga)/D)^(-0.5);
+Lx = 47.1239;
 %Lx = 30;
 
 %Discretization of geometry
 N = 100;
-h = Lx/(N-1);
+h = Lx/(N);
 
-x = 0:h:Lx;
+x = 0+h:h:Lx-h;
 
 %% Generation of Leakage and Absorption Matrices
-L = (-D/h^2).*full(gallery('tridiag',N,1,-2,1));
-A = siga*eye(N,N);
+L = (-D/h^2).*full(gallery('tridiag',N-1,1,-2,1));
+A = siga*eye(N-1,N-1);
 
 M = L+A;
 
 %% Boundary Conditions $(\phi(0) = \phi(L) = 0)$
-M(1,1) = 1; M(1,2) = 0;
-M(end,end) = 1; M(end,end-1) = 0;
+%M(1,1) = 1; M(1,2) = 0;
+%M(end,end) = 1; M(end,end-1) = 0;
 
-phi0 = ones(N,1);
-phi0(1) = 0;
-phi0(N) = 0;
+phi0 = ones(N-1,1);
+%phi0(1) = 0;
+%phi0(N) = 0;
 
 %% Power Iteration Scheme for k-eigenvalue and Flux
 % Algorithm:
@@ -74,7 +74,7 @@ beta = 0.0;
 %M(end,end) = 1; M(end,end-1) = 0;
 
 % k-effective guess
-k = 1.50;
+k = 1.00;
 
 %Tolerance Criterion
 tol = 1e-15;
@@ -83,12 +83,12 @@ for i = 1:100
     
     kold = k;
     
-    psi = (M-beta.*eye(N,N))\(nusigf.*phi0);
-    psi(1) = 0; psi(end) = 0;
+    psi = (M-beta.*eye(N-1,N-1))\(nusigf.*phi0);
+    %psi(1) = 0; psi(end) = 0;
     k = sum(nusigf.*psi)/sum(nusigf*phi0);
     phi0 = (1/k).*psi;
-    phi0(1) = 0;
-    phi0(N) = 0;
+    %phi0(1) = 0;
+    %phi0(N) = 0;
     
     residual = norm(abs(k-kold));
     
@@ -100,7 +100,14 @@ for i = 1:100
     
 end
 
-plot(x,phi0);
+flux = zeros(1,N+1);
+flux(2:N) = phi0;
+
+pos = zeros(1,N+1);
+pos(2:N) = x;
+pos(end) = Lx;
+
+plot(pos,flux);
 xlabel('Position (cm)');
 ylabel('Flux');
 title('Neutron Flux in Slab Geometry for Critical System')
