@@ -11,3 +11,5 @@ Log File:
 2/22/2016: Implemented two-group NDE solver. Validated and verified using two-group analytical solution. Seems to work for more energy groups. Currently no upscatter. Hill's algorithm implemented for alpha-eigenvalue calculation. Python notebook to be finished. Need to reexamine array indexing methods. Reviewed Larsen papers on eigenvalues. Feel comfortable with theorems presented.
 
 3/7/2016-3/11/2016: Created research questions and resources planning document. Continued reviewing paper and creating Zotero library. Implemented six-group Hansen-Roach MATLAB script for criticality eigenvalue. LLNL paperwork and reference letters submitted. 
+
+7/6/2017: Added cell-centered neutron transport eigenvalue MATLAB solver. Solves 1D slab multigroup problems. Requires cross section data.
