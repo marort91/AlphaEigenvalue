@@ -2,6 +2,13 @@
 
 Log File:
 
+12/1/2017
+
+Goals from Last Week: 1) Continue writing SIAM paper
+                      2) Study for Plasma Physics Oral Exam
+                      
+Goals for Next Week: 1) Finish SIAM paper (edits from Livermore incoming).
+
 11/17/2017
 
 Goals from Last Week: 1) Continue writing SIAM paper (Completed)
