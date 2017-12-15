@@ -2,6 +2,12 @@
 
 Log File:
 
+12/15/2017
+
+Goals from Last Week: 1) Finish writing SIAM paper.
+
+Goals for Next Week: 1) Edit SIAM paper (edits from Livermore included). Will require substantial revision in my opinion.
+
 12/1/2017
 
 Goals from Last Week: 1) Continue writing SIAM paper
