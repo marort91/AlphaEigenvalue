@@ -2,6 +2,17 @@
 
 Log File:
 
+Update for 1/24/2017
+
+Goals from Last Week: 1) Started working on disserations (Introduction, Eigenvalue Problems, Linear Algebra Intro)
+                      2) Started doing studies on k-effective Rayleigh quotient studies and comparing to power method.
+                      3) Started literature review on probability of initiation problems.
+                      4) Started classes. Last classes ever (at least at Berkeley...)
+                      
+Goals for Next Week: 1) Continue writing disseration. Submit some parts for feedback.
+                     2) Write discretized probability of initiation MATLAB problem solver.
+                     3) Continue SIAM paper edits (awaiting feedback).
+
 12/15/2017
 
 Goals from Last Week: 1) Finish writing SIAM paper.
