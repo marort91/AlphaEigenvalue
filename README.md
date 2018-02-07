@@ -2,6 +2,19 @@
 
 Log File:
 
+## Update for 2/7/2017
+
+Goals from Last Week
+
+1. Continued **writing** disseration (Introduction, Eigenvalue Problems, Linear Algebra Intro).
+2. Continued analysis on k-effective problems.
+3. Finish Computer Science homework.
+
+Goals for Next Week
+
+1. Currently working on Livermore presentation.
+2. POI on hold.
+
 ## Update for 1/24/2017
 
 Goals from Last Week: 
